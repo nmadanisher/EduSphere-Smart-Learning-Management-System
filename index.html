@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduSphere — Smart Learning Management System</title>
+    <meta name="description" content="An advanced, responsive, and interactive Learning Management System prototype built for BSIT university exhibition with role-based dashboards, course management, interactive lessons, automated quizzes, assignments, and certificates." />
+    <meta property="og:title" content="EduSphere — Smart Learning Management System" />
+    <meta property="og:description" content="An advanced, responsive, and interactive Learning Management System prototype built for BSIT university exhibition with role-based dashboards, course management, interactive lessons, automated quizzes, assignments, and certificates." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Pure CSS3 Design System -->
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <!-- University Exhibition Guided Demo Tour Banner -->
+    <div class="exhibition-banner" id="exhibition-banner">
+      <div class="exhibition-title">
+        <span style="background:#4F46E5;padding:2px 6px;border-radius:4px;font-size:0.7rem;font-weight:800">EXHIBITION TOUR</span>
+        <span>BSIT Academic Showcase</span>
+      </div>
+      <div class="exhibition-steps">
+        <button class="demo-step-btn active" data-step="1" onclick="EduSphere.runExhibitionStep(1)">1. Admin Overview</button>
+        <button class="demo-step-btn" data-step="2" onclick="EduSphere.runExhibitionStep(2)">2. Teacher Console</button>
+        <button class="demo-step-btn" data-step="3" onclick="EduSphere.runExhibitionStep(3)">3. Student Lesson Player</button>
+        <button class="demo-step-btn" data-step="4" onclick="EduSphere.runExhibitionStep(4)">4. Timed Quiz Engine</button>
+        <button class="demo-step-btn" data-step="5" onclick="EduSphere.runExhibitionStep(5)">5. Assignment Submit</button>
+        <button class="demo-step-btn" data-step="6" onclick="EduSphere.runExhibitionStep(6)">6. Instructor Grading</button>
+        <button class="demo-step-btn" data-step="7" onclick="EduSphere.runExhibitionStep(7)">7. Claim Certificate</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem">
+        <button class="btn btn-ghost btn-sm" style="color:#FFFFFF;padding:0.2rem 0.5rem;font-size:0.75rem" onclick="EduSphere.resetDemoData()">Reset Data</button>
+      </div>
+    </div>
+
+    <!-- 3-Zone Top Bar Navigation -->
+    <header id="app-header">
+      <div class="header-container">
+        <!-- Zone 1: Single Wordmark Brand Element -->
+        <a href="#" class="brand-zone" onclick="EduSphere.navigateTo('landing');return false;">
+          <div class="brand-logo-icon">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 2v20"></path></svg>
+          </div>
+          <span class="brand-name">Edu<span>Sphere</span></span>
+        </a>
+
+        <!-- Zone 2: Navigation Links -->
+        <nav class="nav-zone">
+          <a class="nav-link active" data-view="landing" onclick="EduSphere.navigateTo('landing')">Home</a>
+          <a class="nav-link" data-view="courses" onclick="EduSphere.navigateTo('courses')">Curricula</a>
+          <a class="nav-link" data-view="assignments" onclick="EduSphere.navigateTo('assignments')">Assignments</a>
+          <a class="nav-link" data-view="certificates" onclick="EduSphere.navigateTo('certificates')">Certificates</a>
+          <a class="nav-link" data-view="student" onclick="EduSphere.navigateTo('student')">My Learning</a>
+        </nav>
+
+        <!-- Zone 3: Actions & Auth -->
+        <div class="actions-zone">
+          <!-- Notification Bell -->
+          <div style="position:relative">
+            <button class="btn btn-ghost btn-icon" id="notif-bell-btn" onclick="EduSphere.toggleNotifications()" title="Notifications">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+            </button>
+            <span id="notif-badge-count" style="display:none;position:absolute;top:3px;right:3px;background:var(--accent-rose);color:#fff;font-size:0.65rem;font-weight:700;width:16px;height:16px;border-radius:50%;align-items:center;justify-content:center"></span>
+
+            <!-- Notifications Dropdown -->
+            <div class="notif-dropdown" id="notif-dropdown">
+              <div class="notif-header">
+                <span style="font-weight:700;font-size:0.875rem">Notification Center</span>
+                <button class="btn btn-ghost btn-sm" style="font-size:0.75rem;padding:0.2rem 0.4rem" onclick="EduSphere.markAllNotificationsRead()">Mark Read</button>
+              </div>
+              <div class="notif-list" id="notif-items-list"></div>
+            </div>
+          </div>
+
+          <!-- Theme Toggle Button -->
+          <button class="btn btn-ghost btn-icon" id="theme-toggle-btn" onclick="EduSphere.toggleTheme()" title="Toggle Theme">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+          </button>
+
+          <!-- Current Role Indicator -->
+          <span class="role-badge" id="user-role-indicator">Role</span>
+
+          <!-- Dynamic Auth Button / Switcher -->
+          <div id="auth-header-actions" style="display:flex;align-items:center;gap:0.4rem"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Viewport Router Container -->
+    <div id="main-viewport"></div>
+
+    <!-- AI Learning Assistant Drawer -->
+    <div id="ai-assistant-drawer">
+      <div class="ai-header">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <svg class="icon" style="color:var(--primary)" viewBox="0 0 24 24"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+          <span style="font-weight:700;font-size:0.95rem">EduSphere AI Tutor</span>
+          <span class="ai-badge">Simulated AI</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="padding:0.25rem" onclick="EduSphere.toggleAiAssistant()">✕</button>
+      </div>
+
+      <div class="ai-messages-area" id="ai-messages-list">
+        <div class="chat-bubble assistant">
+          Hello! I am your <strong>EduSphere Academic Assistant</strong>. Ask me anything about HTML/CSS semantics, JavaScript promises, relational database normalization (1NF-3NF), TCP/IP handshakes, or study tips!
+        </div>
+      </div>
+
+      <!-- Quick Suggested Prompt Chips -->
+      <div class="ai-chips-row">
+        <button class="prompt-chip" onclick="EduSphere.sendAiQuestion('Explain Flexbox vs CSS Grid')">Flexbox vs Grid</button>
+        <button class="prompt-chip" onclick="EduSphere.sendAiQuestion('How does the JavaScript Event Loop work?')">Event Loop</button>
+        <button class="prompt-chip" onclick="EduSphere.sendAiQuestion('Explain Database 3NF Normalization')">Database 3NF</button>
+        <button class="prompt-chip" onclick="EduSphere.sendAiQuestion('What is TCP 3-way handshake?')">TCP Handshake</button>
+        <button class="prompt-chip" onclick="EduSphere.sendAiQuestion('What are the SOLID principles?')">SOLID Principles</button>
+      </div>
+
+      <div class="ai-input-row">
+        <input type="text" id="ai-user-input" class="ai-input" placeholder="Ask concept explanation..." onkeydown="EduSphere.handleAiInputKey(event)">
+        <button class="btn btn-primary btn-sm" onclick="EduSphere.sendAiQuestion()">Send</button>
+      </div>
+    </div>
+
+    <!-- Floating AI Launcher Button -->
+    <button id="ai-launcher-btn" onclick="EduSphere.toggleAiAssistant()" title="Open AI Study Companion">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+    </button>
+
+    <!-- Global Modal Dialog Backdrop -->
+    <div class="modal-backdrop" id="global-modal-backdrop" onclick="if(event.target === this) EduSphere.closeModal()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="global-modal-title" style="font-size:1.15rem">Modal Dialog</h3>
+          <button class="btn btn-ghost btn-sm" onclick="EduSphere.closeModal()" style="font-size:1.1rem;padding:0.25rem">✕</button>
+        </div>
+        <div class="modal-body" id="global-modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <!-- Vanilla JavaScript Application Engine -->
+    <script type="module" src="/js/script.js"></script>
+  </body>
+</html>

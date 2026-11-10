@@ -1,0 +1,6 @@
+{
+  "name": "EduSphere — Smart Learning Management System",
+  "description": "An advanced, responsive, and interactive Learning Management System prototype built for BSIT university exhibition with role-based dashboards, course management, interactive lessons, automated quizzes, assignments, and certificates.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
